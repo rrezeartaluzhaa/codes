@@ -1,4 +1,4 @@
-namespace EmployeeManagementApp.Models
+namespace NBRMproject.Models
 {
     public class ErrorViewModel
     {

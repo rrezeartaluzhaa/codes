@@ -1,12 +1,13 @@
-using EmployeeManagementApp.Models;
+using NBRMproject.Models;
 using Microsoft.AspNetCore.Mvc;
+using NBRMproject.Models;
 using System.Diagnostics;
 
-namespace EmployeeManagementApp.Controllers
+namespace NBRMproject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger;   
 
         public HomeController(ILogger<HomeController> logger)
         {
