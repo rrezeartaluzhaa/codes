@@ -1,0 +1,75 @@
+﻿@model EmployeeManagementApp.Models.Employee
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Employee Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.EMBG)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.EMBG)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Work History</h4>
+    <hr />
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Employer</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.WorkHistories != null)
+                {
+                    @foreach (var workHistory in Model.WorkHistories)
+                    {
+                        <tr>
+                            <td>@workHistory.Employer</td>
+                            <td>@workHistory.StartDate.ToShortDateString()</td>
+                            <td>@workHistory.EndDate.ToShortDateString()</td>
+                            <td>@workHistory.Position</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.EmployeeID" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

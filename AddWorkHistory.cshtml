@@ -1,0 +1,162 @@
+﻿@model EmployeeManagementApp.Models.WorkHistory
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Add Work History";
+    var workHistories = ViewBag.WorkHistories as IPagedList<EmployeeManagementApp.Models.WorkHistory>;
+    var startDate = ViewBag.StartDate as DateTime?;
+    var endDate = ViewBag.EndDate as DateTime?;
+}
+
+<h1>Work History</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Employee Details</h4>
+        <hr />
+        @if (ViewBag.Employee != null)
+        {
+            <div class="card-text">
+                <strong>First Name:</strong> @ViewBag.Employee.FirstName <br />
+                <strong>Last Name:</strong> @ViewBag.Employee.LastName <br />
+                <strong>EMBG:</strong> @ViewBag.Employee.EMBG <br />
+                <strong>Address:</strong> @ViewBag.Employee.Address <br />
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Add New Work History</h4>
+        <form asp-action="AddWorkHistory" method="post">
+            <div class="form-group">
+                <label asp-for="Employer" class="control-label">Employer</label>
+                <input asp-for="Employer" class="form-control" />
+                <span asp-validation-for="Employer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Start Date</label>
+                <input asp-for="StartDate" type="date" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">End Date</label>
+                <input asp-for="EndDate" type="date" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Position" class="control-label">Position</label>
+                <input asp-for="Position" class="form-control" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="EmployeeID" value="@ViewBag.EmployeeID" />
+
+            <div class="mt-2">
+                <button type="submit" class="btn btn-success" style="background-color: #008000; border-color: #008000; color: white;">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+<div class="card mb-4">
+    <div class="card-body position-relative">
+        <h4 class="card-title">Previous Work Histories</h4>
+
+        <!-- Search Form -->
+        <form method="get" asp-action="AddWorkHistory">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" value="@startDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="endDate">End Date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate" value="@endDate?.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+            <input type="hidden" name="id" value="@ViewBag.EmployeeID" />
+            <button type="submit" class="btn btn-primary mt-2" style="background-color: #5A7ABF; border-color: #5A7ABF; color: white;">Search</button>
+        </form>
+
+        <!-- Pagination Controls -->
+        <div class="work-history-pagination-container mt-3">
+            <ul class="pagination">
+                @if (workHistories.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="AddWorkHistory" asp-route-id="@ViewBag.EmployeeID" asp-route-startDate="@startDate?.ToString("yyyy-MM-dd")" asp-route-endDate="@endDate?.ToString("yyyy-MM-dd")" asp-route-page="@(workHistories.PageNumber - 1)">
+                            &laquo; <!-- Previous Page Arrow -->
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                }
+
+                @if (workHistories.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="AddWorkHistory" asp-route-id="@ViewBag.EmployeeID" asp-route-startDate="@startDate?.ToString("yyyy-MM-dd")" asp-route-endDate="@endDate?.ToString("yyyy-MM-dd")" asp-route-page="@(workHistories.PageNumber + 1)">
+                            &raquo; <!-- Next Page Arrow -->
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Work Histories List -->
+        <div class="row mt-3">
+            @if (workHistories != null && workHistories.Any())
+            {
+                foreach (var history in workHistories)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="border p-2">
+                            <div class="form-group">
+                                <label class="control-label">Employer</label>
+                                <input class="form-control" value="@history.Employer" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Start Date</label>
+                                <input class="form-control" value="@history.StartDate.ToShortDateString()" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">End Date</label>
+                                <input class="form-control" value="@history.EndDate.ToShortDateString()" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Position</label>
+                                <input class="form-control" value="@history.Position" readonly />
+                            </div>
+                            <div class="mt-2">
+                                <a asp-action="EditWorkHistory" asp-route-id="@history.WorkHistoryID" class="btn btn-sm btn-primary">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No work histories found.</p>
+            }
+        </div>
+    </div>
+</div>
+

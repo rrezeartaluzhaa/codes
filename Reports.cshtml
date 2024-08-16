@@ -1,0 +1,25 @@
+﻿@model EmployeeManagementApp.Models.ReportSelectionViewModel
+
+@{
+    ViewData["Title"] = "Select Employee for Report";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!-- Form to Select Employee and Generate Report -->
+<form action="@Url.Action("GenerateReport", "Employees")" method="post">
+    <div class="form-group">
+        <label for="employeeId">Select Employee:</label>
+        <select id="employeeId" name="employeeId" class="form-control">
+            <option value="">-- Select an Employee --</option>
+            @foreach (var employee in Model.Employees)
+            {
+                <option value="@employee.EmployeeID">@employee.FirstName @employee.LastName</option>
+            }
+        </select>
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Generate PDF Report</button>
+    </div>
+</form>
+

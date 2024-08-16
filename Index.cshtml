@@ -1,0 +1,84 @@
+﻿@model X.PagedList.IPagedList<EmployeeManagementApp.Models.Employee>
+
+@using X.PagedList.Mvc.Core;
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Employee Records";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="btn btn-primary"
+       asp-action="Create"
+       style="background-color: #5A7ABF; border-color: #5A7ABF; color: #ffffff;">
+        Create New
+    </a>
+</p>
+
+<!-- Search Form -->
+<form asp-action="Index" method="get" class="mb-3 d-flex align-items-center">
+    <input type="text" name="searchQuery" class="form-control me-2" placeholder="Search" value="@ViewBag.SearchQuery" style="flex: 1; max-width: 300px;" />
+    <button type="submit" class="btn btn-primary" style="background-color: #5A7ABF; border-color: #5A7ABF; color: white;">Search</button>
+</form>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayName("FirstName")</th>
+            <th>@Html.DisplayName("LastName")</th>
+            <th>@Html.DisplayName("EMBG")</th>
+            <th>@Html.DisplayName("Address")</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => item.EMBG)</td>
+                <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.EmployeeID">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.EmployeeID">Delete</a>
+                    <a class="btn btn-dark btn-sm"
+                       asp-action="AddWorkHistory"
+                       asp-route-id="@item.EmployeeID"
+                       style="background-color: #335D9D; border-color: #335D9D;">
+                        Work History
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination-container mt-3">
+    @Html.PagedListPager(
+            Model,
+            page => Url.Action("Index", new
+            {
+                page,
+                searchQuery = ViewBag.SearchQuery,
+            }),
+            new PagedListRenderOptions
+    {
+        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded,
+        DisplayPageCountAndCurrentLocation = false,
+        LinkToFirstPageFormat = "First",
+        LinkToPreviousPageFormat = "&laquo;", // Previous Page Arrow
+        LinkToNextPageFormat = "&raquo;", // Next Page Arrow
+        LinkToLastPageFormat = "Last",
+        EllipsesFormat = "…"
+    }
+    )
+</div>
